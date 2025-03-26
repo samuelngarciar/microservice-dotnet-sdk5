@@ -18,14 +18,20 @@ jobs:
       # Verify Application Accessibility
       - name: Verify Application
         run: |
-          sleep 30 # Wait for the application to start
+          sleep 5 # Wait for the application to start
           curl http://localhost:5000
       
       # Security Checks
+      #- name: OWASP ZAP Scan
+       # run: |
+        #  docker run -i  ghcr.io/zaproxy/zaproxy:stable bash -c "zap-full-scan.py -t http://localhost:5000"
+      # Security Checks
       - name: OWASP ZAP Scan
         run: |
-          docker run -i  ghcr.io/zaproxy/zaproxy:stable bash -c "zap-full-scan.py -t http://localhost:5000"
-      
+          docker run -d --name zap -p 8080:8080 -p 8090:8090 ghcr.io/zaproxy/zaproxy:stable
+          sleep 30 # Wait for ZAP to start
+          docker exec zap zap-full-scan.py -t http://host.docker.internal:5000
+          
       - name: Dependency Scanning
         uses: snyk/actions/dotnet@master
         env:
