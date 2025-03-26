@@ -41,15 +41,10 @@ jobs:
           ##fail_action: false
 
       # deployment
-      - name: Deploy to Kubernetes
-        uses: docker://google/cloud-sdk:slim
-        with:
-          args: --entrypoint ""
+      - name: Setup Docker
         run: |
-          # Verify kubectl installation
-          kubectl version --client
-          
-          # Your kubectl commands here
-          #kubectl apply -f ./kubernetes/deployment.yaml
-          #kubectl rollout status deployment/microservice-dotnet-sdk5
+          curl -o kubectl https://s3.us-west-2.amazonaws.com/amazon-eks/1.22.6/2022-03-09/bin/linux/amd64/kubectl
+          chmod +x ./kubectl
+          ./kubectl version --client
+
 
