@@ -24,9 +24,6 @@ spec:
         securityContext:
           allowPrivilegeEscalation: false
           readOnlyRootFilesystem: true
-        volumeMounts:
-        - name: config-volume
-          mountPath: /app/config
         resources:
           requests:
             cpu: 150m
