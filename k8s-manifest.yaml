@@ -1,0 +1,63 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: microservice-dotnet-sdk5
+spec:
+  replicas: 1
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+  selector:
+    matchLabels:
+      app: microservice-dotnet-sdk5
+  template:
+    metadata:
+      labels:
+        app: microservice-dotnet-sdk5
+    spec:
+      containers:
+      - name: microservice-dotnet-sdk5
+        image: samuelngarciar/microservice-dotnet-sdk5
+        ports:
+        - containerPort: 80
+        securityContext:
+          allowPrivilegeEscalation: false
+          readOnlyRootFilesystem: true
+        volumeMounts:
+        - name: config-volume
+          mountPath: /app/config
+        resources:
+          requests:
+            cpu: 150m
+            memory: 256Mi
+          limits:
+            cpu: 300m
+            memory: 512Mi
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 80
+          initialDelaySeconds: 60
+          periodSeconds: 30
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: 80
+          initialDelaySeconds: 30
+          periodSeconds: 15
+
+---
+# service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: microservice-dotnet-sdk5
+spec:
+  selector:
+    app: microservice-dotnet-sdk5
+  ports:
+  - protocol: TCP
+    port: 80
+    targetPort: 80
+  type: LoadBalancer
