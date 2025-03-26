@@ -41,21 +41,7 @@ jobs:
           fail_action: false
           
 
-      # Dependency Scanning
-      - name: Authenticate with Snyk
-        env:
-          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
-        run: |
-          # Clear any existing authentication
-          rm -rf ~/.snyk
-          
-          # Set token as environment variable
-          echo "$SNYK_TOKEN" > ~/.snyk
-          chmod 600 ~/.snyk
-          
-          # Verify authentication
-          snyk auth whoami
-      
+      # Dependency Scanning     
       - name: Set up Snyk CLI to check for security issues
         # Snyk can be used to break the build when it detects security issues.
         # In this case we want to upload the SAST issues to GitHub Code Scanning
@@ -71,7 +57,20 @@ jobs:
           # This is where you will need to introduce the Snyk API token created with your Snyk account
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
 
-
+      - name: Authenticate with Snyk
+        env:
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+        run: |
+          # Clear any existing authentication
+          rm -rf ~/.snyk
+          
+          # Set token as environment variable
+          echo "$SNYK_TOKEN" > ~/.snyk
+          chmod 600 ~/.snyk
+          
+          # Verify authentication
+          snyk auth whoami
+          
         # Runs Snyk Container (Container and SCA) analysis and uploads result to Snyk.
       - name: Snyk Container monitor
         run: |
