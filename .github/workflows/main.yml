@@ -24,7 +24,7 @@ jobs:
       # Security Checks
       - name: OWASP ZAP Scan
         run: |
-          docker run -d -i  ghcr.io/zaproxy/zaproxy:stable bash -c "apt-get update && apt-get install -y tree;tree;zap-full-scan.py -t http://localhost:5000"
+          docker run -d -i  ghcr.io/zaproxy/zaproxy:stable bash -c "apt-get update && apt-get install -y && tree && zap-full-scan.py -t http://localhost:5000"
   
           
       - name: Dependency Scanning
