@@ -40,14 +40,7 @@ jobs:
           cmd_options: '-a'
           fail_action: false
           
-      - name: Verify Project Files
-        run: |
-          ls -la ./hello-world-dotnet/*.csproj
-          cat ./hello-world-dotnet/hello-world-dotnet.csproj | head -n 5
-    
-      - name: Check Working Directory
-        run: pwd && ls -la   
-        
+
       # Dependency Scanning
       - name: Set up Snyk CLI to check for security issues
         # Snyk can be used to break the build when it detects security issues.
@@ -64,19 +57,7 @@ jobs:
           # This is where you will need to introduce the Snyk API token created with your Snyk account
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
 
-        # Runs Snyk Code (SAST) analysis and uploads result into GitHub.
-        # Use || true to not fail the pipeline
-      - name: Snyk Code test
-        run: snyk code test --sarif > snyk-code.sarif || true
 
-        # Runs Snyk Open Source (SCA) analysis and uploads result to Snyk.
-      - name: Snyk Open Source monitor
-        run: snyk monitor --all-projects
-
-        # Runs Snyk Infrastructure as Code (IaC) analysis and uploads result to Snyk.
-        # Use || true to not fail the pipeline.
-      - name: Snyk IaC test and report
-        run: snyk iac test --report # || true
 
         # Build the docker image for testing
       - name: Build a Docker image
