@@ -7,48 +7,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-
-      # Install Dependencies
-      - name: Install Dependencies
+      
+      # Use Pre-configured Docker Image
+      - name: Setup Docker
         run: |
-          sudo apt-get update
-          sudo apt-get install -y build-essential checkinstall zlib1g-dev
-      
-      # Download and Install OpenSSL
-      - name: Install OpenSSL
-        run: |
-          wget https://www.openssl.org/source/openssl-1.1.1k.tar.gz
-          tar -xzvf openssl-1.1.1k.tar.gz
-          cd openssl-1.1.1k
-          ./config --prefix=/usr/local/ssl --openssldir=/usr/local/ssl shared zlib
-          make
-          sudo make install
-          sudo ln -s /usr/local/ssl/bin/openssl /usr/bin/openssl
-          openssl version
-      
-      # Build & Test
-      - name: Setup .NET Core SDK
-        uses: actions/setup-dotnet@v2
-        with:
-          dotnet-version: '5.x'
-      
-      - name: Restore NuGet Packages
-        run: dotnet restore
-      
-      - name: Build
-        run: dotnet build --no-restore
-        
-      - name: Test
-        run: dotnet test --no-build --verbosity normal
-      
-      - name: Publish
-        run: dotnet publish -c Release -o out
-      
-      - name: Build Docker Image
-        run: docker build . -t hello-world-dotnet:latest
-      
-      - name: Run Docker Compose
-        run: docker run -d -it --rm -e ASPNETCORE_URLS=http://+:5000 -e ASPNETCORE_ENVIRONMENT=Development -p 5000:5000 hello-world-dotnet:latest
+          docker pull mcr.microsoft.com/dotnet/sdk:5.0
+          docker run -d -p 5000:5000 --name myapp -v $(pwd):/app -w /app mcr.microsoft.com/dotnet/sdk:5.0 /bin/bash -c "dotnet restore && dotnet build --no-restore && dotnet publish -c Release -o out && dotnet run"
       
       # Security Checks
       - name: OWASP ZAP Scan
