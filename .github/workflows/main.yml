@@ -42,6 +42,20 @@ jobs:
           
 
       # Dependency Scanning
+      - name: Authenticate with Snyk
+        env:
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+        run: |
+          # Clear any existing authentication
+          rm -rf ~/.snyk
+          
+          # Set token as environment variable
+          echo "$SNYK_TOKEN" > ~/.snyk
+          chmod 600 ~/.snyk
+          
+          # Verify authentication
+          snyk auth whoami
+      
       - name: Set up Snyk CLI to check for security issues
         # Snyk can be used to break the build when it detects security issues.
         # In this case we want to upload the SAST issues to GitHub Code Scanning
