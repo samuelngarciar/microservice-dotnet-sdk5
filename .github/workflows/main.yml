@@ -41,7 +41,7 @@ jobs:
           ##fail_action: false
 
       # deployment
-      - name: Setup Docker
+      - name: Deploy Kubernetes
         run: |
           echo "${{ secrets.KUBECONFIG }}" > ./config
           export KUBECONFIG=$(pwd)/config
@@ -51,5 +51,8 @@ jobs:
           export PATH=$(pwd):$PATH
           kubectl version --client
           kubectl get nodes
+          pwd
+          kubectl delete -f k8s-manifest.yaml
+          kubectl apply -f k8s-manifest.yaml
 
 
