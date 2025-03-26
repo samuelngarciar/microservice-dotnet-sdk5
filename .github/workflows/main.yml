@@ -12,7 +12,8 @@ jobs:
       - name: Setup Docker
         run: |
           docker pull mcr.microsoft.com/dotnet/sdk:5.0
-          docker run -d -p 5000:5000 --name myapp -v $(pwd):/app -w /app mcr.microsoft.com/dotnet/sdk:5.0 /bin/bash -c "dotnet restore && dotnet build --no-restore && dotnet publish -c Release -o out && dotnet run"
+          docker pull mcr.microsoft.com/dotnet/aspnet:5.0
+          docker run -d -p 5000:5000 --name myapp -v $(pwd):/app -w /app mcr.microsoft.com/dotnet/aspnet:5.0 /bin/bash -c "dotnet restore && dotnet build --no-restore && dotnet publish -c Release -o out && dotnet run"
       
       # Verify Application Accessibility
       - name: Verify Application
