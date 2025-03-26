@@ -46,4 +46,4 @@ jobs:
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
         with:
-          args: --file=./hello-world-dotnet
+          args: --file=./hello-world-dotnet/microservice-dotnet-sdk5.csproj --package-manager=nuget
