@@ -43,6 +43,6 @@ jobs:
       # Dependency Scanning
       - name: Snyk Scan
         uses: snyk/actions/dotnet@master
-        working-directory: ./hello-world-dotnet
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+        working-directory: ./hello-world-dotnet
