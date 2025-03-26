@@ -52,8 +52,8 @@ jobs:
           kubectl version --client
           kubectl get nodes
           kubectl delete -f k8s-manifest.yaml 2>/dev/null >/dev/null &
-          echo 'waiting 2 seconds'
-          sleep 2
+          echo 'waiting 5 seconds'
+          sleep 5
           kubectl apply -f k8s-manifest.yaml
           kubectl get pods
           kubectl get svc
