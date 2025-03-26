@@ -2,7 +2,7 @@ FROM mcr.microsoft.com/dotnet/sdk:5.0 AS builder
 WORKDIR /usr/src/app
 
 # download deps
-COPY ‎hello-world-dotnet.csproj .
+COPY hello-world-dotnet.csproj .
 RUN dotnet restore
 
 COPY . .
