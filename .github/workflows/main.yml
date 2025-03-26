@@ -1,4 +1,4 @@
-name: .NET CI/CD Pipelin
+name: .NET CI/CD Pipeline
 on:
   push:
     branches: [ main ]
@@ -15,7 +15,7 @@ jobs:
           target: 'http://localhost:5000'
       
       - name: Dependency Scanning
-        uses: snyk/actions/scan@master
+        uses: snyk/actions/dotnet@master
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
       
