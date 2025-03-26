@@ -8,11 +8,23 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-       # Install OpenSSL
-      - name: Install OpenSSL
+      # Install Dependencies
+      - name: Install Dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -y libssl1.1
+          sudo apt-get install -y build-essential checkinstall zlib1g-dev
+      
+      # Download and Install OpenSSL
+      - name: Install OpenSSL
+        run: |
+          wget https://www.openssl.org/source/openssl-1.1.1k.tar.gz
+          tar -xzvf openssl-1.1.1k.tar.gz
+          cd openssl-1.1.1k
+          ./config --prefix=/usr/local/ssl --openssldir=/usr/local/ssl shared zlib
+          make
+          sudo make install
+          sudo ln -s /usr/local/ssl/bin/openssl /usr/bin/openssl
+          openssl version
       
       # Build & Test
       - name: Setup .NET Core SDK
