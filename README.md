@@ -1,5 +1,4 @@
 # hello-world-dotnet
-Test
 A "hello world" application written in .NET Core.
 
 ## Running the Application
