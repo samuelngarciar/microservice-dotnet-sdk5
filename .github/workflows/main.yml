@@ -2,6 +2,7 @@ name: .NET CI/CD Pipeline
 on:
   push:
     branches: [ main ]
+
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
@@ -13,7 +14,11 @@ jobs:
         run: |
           cd ./hello-world-dotnet
           docker build . -t hello-world-dotnet:latest
-          docker run -d -it --rm -e ASPNETCORE_URLS=http://+:5000 -e ASPNETCORE_ENVIRONMENT=Development -p 5000:5000 hello-world-dotnet:latest
+          docker run -d --rm --name dotnet-app \
+            -e ASPNETCORE_URLS=http://+:5000 \
+            -e ASPNETCORE_ENVIRONMENT=Development \
+            -p 5000:5000 \
+            hello-world-dotnet:latest
       
       # Verify Application Accessibility
       - name: Verify Application
@@ -22,16 +27,17 @@ jobs:
           curl http://localhost:5000
       
       # Security Checks
-      #- name: OWASP ZAP Scan
-       # run: |
-        #  docker run -i  ghcr.io/zaproxy/zaproxy:stable bash -c "zap-full-scan.py -t http://localhost:5000"
-      # Security Checks
       - name: OWASP ZAP Scan
         run: |
-          docker run -d --name zap -p 8080:8080 -p 8090:8090 ghcr.io/zaproxy/zaproxy:stable
-          sleep 30 # Wait for ZAP to start
-          docker exec zap zap-full-scan.py -t http://host.docker.internal:5000
+          docker run -i --network="host" ghcr.io/zaproxy/zaproxy:stable \
+            zap-full-scan.py -t http://localhost:5000 -I -r scan-report.html
           
+      - name: Upload ZAP Report
+        uses: actions/upload-artifact@v2
+        with:
+          name: zap-report
+          path: scan-report.html
+
       - name: Dependency Scanning
         uses: snyk/actions/dotnet@master
         env:
