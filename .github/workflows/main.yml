@@ -40,6 +40,14 @@ jobs:
           cmd_options: '-a'
           fail_action: false
           
+      - name: Verify Project Files
+        run: |
+          ls -la ./hello-world-dotnet/*.csproj
+          cat ./hello-world-dotnet/hello-world-dotnet.csproj | head -n 5
+    
+      - name: Check Working Directory
+        run: pwd && ls -la   
+        
       # Dependency Scanning
       - name: Snyk Scan
         uses: snyk/actions/dotnet@master
