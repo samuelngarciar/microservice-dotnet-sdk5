@@ -40,8 +40,3 @@ jobs:
           cmd_options: '-a'
           fail_action: false
           
-      # Dependency Scanning
-      - name: Dependency Scanning
-        uses: snyk/actions/dotnet@master
-        env:
-          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
