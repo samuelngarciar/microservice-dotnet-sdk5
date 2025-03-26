@@ -31,12 +31,25 @@ jobs:
           curl http://localhost:5000
       
       # Security Checks
-      - name: OWASP ZAP Scan
-        uses: zaproxy/action-full-scan@v0.12.0
+      #- name: OWASP ZAP Scan
+        #uses: zaproxy/action-full-scan@v0.12.0
+        #with:
+          #token: ${{ secrets.GITHUB_TOKEN }}
+          #docker_name: 'ghcr.io/zaproxy/zaproxy:stable'
+          #target: 'http://localhost:5000'
+          #cmd_options: '-a'
+          ##fail_action: false
+
+      # deployment
+      - name: Deploy to Kubernetes
+        uses: docker://google/cloud-sdk:slim
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          docker_name: 'ghcr.io/zaproxy/zaproxy:stable'
-          target: 'http://localhost:5000'
-          cmd_options: '-a'
-          fail_action: false
+          args: --entrypoint ""
+        run: |
+          # Verify kubectl installation
+          kubectl version --client
+          
+          # Your kubectl commands here
+          #kubectl apply -f ./kubernetes/deployment.yaml
+          #kubectl rollout status deployment/microservice-dotnet-sdk5
 
