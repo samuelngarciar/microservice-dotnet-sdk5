@@ -6,7 +6,8 @@ A "hello world" application written in .NET Core.
 I am using this microservice in combination with the file "k8s-manifest.yaml" for expose public access this microservice on kubernetes
 
 
-### On the other option you can test the Application on your local machine only using docker
+### Only for local test
+If you want test this microservice on your local machine (without kubernetes) then follow the follow steps
 
 From the `hello-world-dotnet` subdirectory, run:
 
