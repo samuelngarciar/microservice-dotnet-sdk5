@@ -1,6 +1,11 @@
 # hello-world-dotnet
 A "hello world" application written in .NET Core.
 
+
+### Note
+I am using this microservice in combination with the file k8s-manifiest for expose public access this microservice on kubernetes
+
+
 ## Running the Application
 
 From the `hello-world-dotnet` subdirectory, run:
